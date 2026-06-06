@@ -14,16 +14,176 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          address: string | null
+          admin_notes: string | null
+          assigned_to: string | null
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string
+          detail: string | null
+          engineer_name: string | null
+          id: string
+          issue_type: string
+          public_ref: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          admin_notes?: string | null
+          assigned_to?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone: string
+          detail?: string | null
+          engineer_name?: string | null
+          id?: string
+          issue_type: string
+          public_ref?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          admin_notes?: string | null
+          assigned_to?: string | null
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string
+          detail?: string | null
+          engineer_name?: string | null
+          id?: string
+          issue_type?: string
+          public_ref?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ticket_updates: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["ticket_status"] | null
+          id: string
+          note: string | null
+          ticket_id: string
+          to_status: Database["public"]["Enums"]["ticket_status"] | null
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["ticket_status"] | null
+          id?: string
+          note?: string | null
+          ticket_id: string
+          to_status?: Database["public"]["Enums"]["ticket_status"] | null
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["ticket_status"] | null
+          id?: string
+          note?: string | null
+          ticket_id?: string
+          to_status?: Database["public"]["Enums"]["ticket_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_updates_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_ticket_public: {
+        Args: { p_ref: string }
+        Returns: {
+          created_at: string
+          customer_name: string
+          engineer_name: string
+          issue_type: string
+          public_ref: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          updated_at: string
+        }[]
+      }
+      get_ticket_timeline_public: {
+        Args: { p_ref: string }
+        Returns: {
+          author_name: string
+          created_at: string
+          to_status: Database["public"]["Enums"]["ticket_status"]
+        }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "engineer"
+      ticket_status: "new" | "assigned" | "in_progress" | "resolved" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +310,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "engineer"],
+      ticket_status: ["new", "assigned", "in_progress", "resolved", "closed"],
+    },
   },
 } as const
