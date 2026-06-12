@@ -19,6 +19,7 @@ import TrackTicket from "./pages/TrackTicket";
 import AdminAuth from "./pages/AdminAuth";
 import AdminTickets from "./pages/AdminTickets";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/quick-support" element={<QuickSupport />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/lms" element={<LMS />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/internship" element={<Internship />} />
             <Route path="/placement" element={<Placement />} />
             <Route path="/projects" element={<Projects />} />
