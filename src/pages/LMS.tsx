@@ -8,13 +8,40 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen, Award, FileText, Video, ClipboardCheck, BarChart3, Users, Shield } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 function LoginForm({ role }: { role: string }) {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   return (
     <form
-      onSubmit={e => { e.preventDefault(); if (!email || !pw) return toast({ title: "Enter credentials" }); toast({ title: `${role} login`, description: "LMS backend is not yet connected. Enable Lovable Cloud to activate real authentication." }); }}
+      onSubmit={async e => {
+  e.preventDefault();
+
+  if (!email || !pw) {
+    return toast({ title: "Enter credentials" });
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: pw,
+  });
+
+  if (error) {
+    toast({
+      title: "Login Failed",
+      description: error.message,
+    });
+    return;
+  }
+
+  toast({
+    title: "Login Success",
+    description: `Welcome ${role}`,
+  });
+
+  console.log(data);
+}}
       className="grid gap-4"
     >
       <div><Label>Email / Student ID</Label><Input value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" /></div>
