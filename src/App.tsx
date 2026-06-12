@@ -20,6 +20,7 @@ import AdminAuth from "./pages/AdminAuth";
 import AdminTickets from "./pages/AdminTickets";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import TrainerDashboard from "./pages/TrainerDashboard";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/academy" element={<Academy />} />
             <Route path="/lms" element={<LMS />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
             <Route path="/internship" element={<Internship />} />
             <Route path="/placement" element={<Placement />} />
             <Route path="/projects" element={<Projects />} />
