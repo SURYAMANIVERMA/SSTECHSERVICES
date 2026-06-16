@@ -41,10 +41,10 @@ console.log("Login error:", error);
   }
 
   const { data: profile, error: profileError } = await supabase
-  .from("profiles")
+  .from("user_roles")
   .select("role")
-  .eq("id", data.user?.id)
-  .single();
+  .eq("user_id", data.user?.id as string)
+  .maybeSingle();
         
 console.log("Profile:", profile);
 console.log("Profile role:", profile?.role);
@@ -68,7 +68,7 @@ if (role === "Admin" && profile?.role !== "admin") {
   return;
 }
 
-if (role === "Trainer" && profile?.role !== "trainer") {
+if (role === "Trainer" && profile?.role !== "engineer") {
   toast({
     title: "Access Denied",
     description: "Trainer account required",
@@ -77,12 +77,11 @@ if (role === "Trainer" && profile?.role !== "trainer") {
   return;
 }
         
-if (role === "Student" && profile?.role !== "student") {
+if (role === "Student") {
   toast({
     title: "Access Denied",
-    description: "Student account required",
+    description: "Student logins not enabled yet",
   });
-
   await supabase.auth.signOut();
   return;
 }
@@ -95,7 +94,7 @@ toast({
 if (profile?.role === "admin") {
   navigate("/admin/tickets");
 }
-else if (profile?.role === "trainer") {
+else if (profile?.role === "engineer") {
   navigate("/trainer-dashboard");
 }
 else {
